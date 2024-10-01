@@ -1,0 +1,6 @@
+@WorkWhiz.API_HostAddress = http://localhost:5072
+
+GET {{WorkWhiz.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
