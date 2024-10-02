@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorkWhiz.Core\WorkWhiz.Core.csproj" />
+    <ProjectReference Include="..\WorkWhiz.Infraestructure\WorkWhiz.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>
