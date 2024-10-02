@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WorkWhiz.Core.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using WorkWhiz.Core.DTOs;
 using WorkWhiz.Infraestructure.Interfaces;
 
 namespace WorkWhiz.API.Controllers
@@ -15,7 +14,7 @@ namespace WorkWhiz.API.Controllers
             _posterRepository = posterRepository;
         }
         [HttpGet]
-        public ActionResult<List<Poster>> Get()
+        public ActionResult<List<PosterDto>> Get()
         {
             return Ok(_posterRepository.GetPosters());
         }

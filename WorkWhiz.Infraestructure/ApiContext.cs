@@ -12,5 +12,7 @@ namespace WorkWhiz.Infraestructure
 
         public DbSet<Poster> Posters { get; set; }
         public DbSet<Bidder> Bidders { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<Bid> Bids { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System;
 using WorkWhiz.Infraestructure;
 using WorkWhiz.Infraestructure.Interfaces;
 using WorkWhiz.Infraestructure.Repositories;
@@ -10,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(WorkWhiz.Core.MappingProfiles.MappingProfile));
 
 builder.Services.AddDbContext<ApiContext>(options =>
 {
