@@ -11,9 +11,19 @@ namespace WorkWhiz.Infraestructure.Repositories
 {
     public class PosterRepository : IPosterRepository
     {
+        private readonly ApiContext _context;
+
+        public PosterRepository(ApiContext context)
+        {
+            _context = context;
+        }
+
         public List<Poster> GetPosters()
         {
-            throw new NotImplementedException();
+            var list = _context.Posters
+                .Include(a => a.Jobs)
+                .ToList();
+            return list;
         }
     }
 }
