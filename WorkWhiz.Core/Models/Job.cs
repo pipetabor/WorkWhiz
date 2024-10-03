@@ -8,8 +8,8 @@
         public string Description { get; set; }
         public string Status { get; set; }
         public string Requirements { get; set; }
-        public DateTime Posted_Date { get; set; } = DateTime.Now;
-        public DateTime Expiration_Date { get; set; }
+        public DateTime PostedDate { get; set; } = DateTime.Now;
+        public DateTime ExpirationDate { get; set; }
         public List<Bid> Bids { get; set; } = new List<Bid>();
         public Poster Poster { get; set; }
     }
