@@ -35,7 +35,7 @@ namespace WorkWhiz.Infraestructure
             if (!_context.Bids.Any())
             {
                 var bids = GenerateBids(20, jobs, bidders);
-                _context.Jobs.AddRange(jobs);
+                _context.Bids.AddRange(bids);
             }
             await _context.SaveChangesAsync();
         }
@@ -85,7 +85,7 @@ namespace WorkWhiz.Infraestructure
                     Id = i + 1,
                     Name = $"{firstName} {lastName}",
                     Email = email,
-                    Bids = new List<Bid>() // Initialize Bids list
+                    Bids = new List<Bid>()
                 });
             }
 
@@ -107,16 +107,15 @@ namespace WorkWhiz.Infraestructure
                     Poster = poster,
                     Name = $"Job Title {i + 1}",
                     Description = $"This is a detailed description for Job Title {i + 1}. It includes information about the responsibilities, qualifications, and other relevant details.",
-                    Status = random.Next(1, 4) switch 
+                    Status = random.Next(1, 3) switch 
                     {
                         1 => "Open",
-                        2 => "In Progress",
-                        3 => "Completed",
-                        _ => throw new ArgumentOutOfRangeException() // Handle unexpected random value
+                        2 => "Closed",
+                        _ => throw new ArgumentOutOfRangeException()
                     },
                     Requirements = $"Here are the specific requirements for Job Title {i + 1}.",
-                    Posted_Date = DateTime.Now.Subtract(TimeSpan.FromDays(random.Next(1, 14))), 
-                    Expiration_Date = DateTime.Now.AddDays(random.Next(7, 30)) 
+                    PostedDate = DateTime.Now.Subtract(TimeSpan.FromDays(random.Next(1, 14))), 
+                    ExpirationDate = DateTime.Now.AddDays(random.Next(7, 30)) 
                 };
                 jobs.Add(job);
             }
@@ -137,12 +136,14 @@ namespace WorkWhiz.Infraestructure
                 var bid = new Bid
                 {
                     Id = i + 1,
-                    Job_Id = job.Id,
-                    Bidder_Id = bidder.Id,
+                    JobId = job.Id,
+                    Job = job,
+                    BidderId = bidder.Id,
                     Amount = (decimal)(random.Next(100, 1000) + random.NextDouble() * 100),
-                    Bid_Date = DateTime.Now.Subtract(TimeSpan.FromDays(random.Next(1, 7))) // Bid within the last week
+                    BidDate = DateTime.Now.Subtract(TimeSpan.FromDays(random.Next(1, 7)))
                 };
 
+                job.Bids.Add(bid);
                 bids.Add(bid);
             }
 
