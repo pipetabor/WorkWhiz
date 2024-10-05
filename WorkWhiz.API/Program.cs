@@ -5,6 +5,17 @@ using WorkWhiz.Infraestructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -24,8 +35,12 @@ builder.Services.AddTransient<SeedDataService>();
 
 // Register other services
 builder.Services.AddScoped<IPosterRepository, PosterRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
 
 var app = builder.Build();
+
+// Enable CORS
+app.UseCors("AllowAngularApp");
 
 // Run seeding logic at startup
 using (var scope = app.Services.CreateScope())
