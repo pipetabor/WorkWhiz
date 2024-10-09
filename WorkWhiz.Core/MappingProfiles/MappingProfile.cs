@@ -8,11 +8,13 @@ namespace WorkWhiz.Core.MappingProfiles
     {
         public MappingProfile()
         {
-            // Define mappings between models and DTOs
             CreateMap<Poster, PosterDto>();
             CreateMap<Poster, PosterNameDto>();
-            CreateMap<Job, JobDto>();
+            CreateMap<Job, JobDto>().ReverseMap();
+            CreateMap<Job, JobCreateDto>().ReverseMap();
             CreateMap<Job, JobTop10Dto>();
+            CreateMap<Job, JobTopActiveDto>().ReverseMap();
+            CreateMap<Bid, BidDto>().ReverseMap();
         }
     }
 }

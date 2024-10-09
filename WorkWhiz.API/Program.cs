@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WorkWhiz.Core.Hubs;
 using WorkWhiz.Infraestructure;
 using WorkWhiz.Infraestructure.Interfaces;
 using WorkWhiz.Infraestructure.Repositories;
@@ -12,7 +13,8 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("http://localhost:4200")
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
 });
 
@@ -36,8 +38,15 @@ builder.Services.AddTransient<SeedDataService>();
 // Register other services
 builder.Services.AddScoped<IPosterRepository, PosterRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+// Add SignalR Files compatibility
+app.MapHub<JobHub>("/hubs/job");
 
 // Enable CORS
 app.UseCors("AllowAngularApp");
