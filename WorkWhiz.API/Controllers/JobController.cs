@@ -9,15 +9,22 @@ namespace WorkWhiz.API.Controllers
     public class JobController : ControllerBase
     {
         readonly IJobRepository _jobRepository;
+
         public JobController(IJobRepository jobRepository)
         {
             _jobRepository = jobRepository;
         }
 
-        [HttpGet]
+        [HttpGet("most-recent")]
         public async Task<ActionResult<List<JobTop10Dto>>> GetTop10MostRecentJobs()
         {
             return Ok(await _jobRepository.GetTop10MostRecentJobsAsync());
+        }
+
+        [HttpGet("top-active")]
+        public async Task<ActionResult<List<JobTopActiveDto>>> GetTopActiveJobs()
+        {
+            return Ok(await _jobRepository.GetTopActiveJobsAsync(10));
         }
     }
 }

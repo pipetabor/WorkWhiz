@@ -5,6 +5,8 @@ namespace WorkWhiz.Infraestructure.Interfaces
     public interface IJobRepository
     {
         public Task<List<JobTop10Dto>> GetTop10MostRecentJobsAsync();
-        public List<JobDto> GetTop10MostActiveJobsAsync();
+        public Task<List<JobTopActiveDto>> GetTopActiveJobsAsync(int topNumber);
+        public Task<JobCreateDto> CreateJobAsync(JobCreateDto jobCreateDto);
+        public Task<List<JobTop10Dto>> GetPaginatedActiveJobsAsync(int page, int pagesize);
     }
 }
