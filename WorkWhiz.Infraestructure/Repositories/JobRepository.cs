@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WorkWhiz.Core.DTOs;
+using WorkWhiz.Core.Models;
 using WorkWhiz.Infraestructure.Interfaces;
 
 namespace WorkWhiz.Infraestructure.Repositories
@@ -16,9 +17,27 @@ namespace WorkWhiz.Infraestructure.Repositories
             _mapper = mapper;
         }
 
-        public List<JobDto> GetTop10MostActiveJobsAsync()
-        {            
-            throw new NotImplementedException();
+        public async Task<List<JobTopActiveDto>> GetTopActiveJobsAsync(int topNumber)
+        {
+            var topActiveJobs = await _context.Jobs
+                .Include(b => b.Bids)
+                .OrderByDescending(b => b.Bids.Count())
+                .Take(topNumber)
+                .Where(j => j.Status == "Open")
+                .Select(j => new JobTopActiveDto
+                {
+                    Id = j.Id,
+                    Name = j.Name,
+                    Description = j.Description.Substring(0, Math.Min(100, j.Description.Length)) + "...",
+                    Status = j.Status,
+                    PostedDate = j.PostedDate,
+                    ExpirationDate = j.ExpirationDate,
+                    BidCount = j.Bids.Count,
+                    LowestBid = j.Bids.Select(b => b.Amount).Min()
+                })
+                .ToListAsync();
+
+            return _mapper.Map<List<JobTopActiveDto>>(topActiveJobs);
         }
 
         public async Task<List<JobTop10Dto>> GetTop10MostRecentJobsAsync()
@@ -48,6 +67,30 @@ namespace WorkWhiz.Infraestructure.Repositories
             t.Wait();
 
             return _mapper.Map<List<JobTop10Dto>>(topTenJobs);
-        }        
+        }
+
+        public async Task<JobCreateDto> CreateJobAsync(JobCreateDto jobCreateDto)
+        {
+            var newJob = _mapper.Map<Job>(jobCreateDto);
+
+            var poster = await _context.Posters.FindAsync(jobCreateDto.PosterId);
+            if (poster == null)
+            {
+                throw new Exception("Poster not found");
+            }
+
+            newJob.Poster = poster;
+
+            _context.Jobs.Add(newJob);
+
+            await _context.SaveChangesAsync();
+
+            return jobCreateDto;
+        }
+
+        public Task<List<JobTop10Dto>> GetPaginatedActiveJobsAsync(int page, int pagesize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
